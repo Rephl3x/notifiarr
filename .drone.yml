@@ -9,7 +9,6 @@ steps:
       DOCKER_HOST:
         from_secret: docker_host
     commands:
-      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - docker pull notifiarr/notifiarr:latest
       - docker stop notifiarr || true
       - docker rm notifiarr || true
