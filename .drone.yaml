@@ -1,0 +1,22 @@
+kind: pipeline
+type: docker
+name: notifiarr-deployment
+
+steps:
+  - name: deploy
+    image: docker
+    environment:
+      DOCKER_HOST:
+        from_secret: docker_host
+    commands:
+      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - docker pull notifiarr/notifiarr:latest
+      - docker stop notifiarr || true
+      - docker rm notifiarr || true
+      - docker run -d --name notifiarr -p 8080:8080 notifiarr/notifiarr:latest
+
+  - name: cleanup
+    image: docker
+    commands:
+      - docker stop notifiarr
+      - docker rm notifiarr
